@@ -194,6 +194,8 @@ const styles = {
     borderRadius: "10px",
     outline: "none",
     backgroundColor: "#fff",
+    color: "#111827",
+    caretColor: "#111827",
   },
   textarea: {
     padding: "12px 14px",
@@ -204,6 +206,8 @@ const styles = {
     minHeight: "110px",
     resize: "vertical",
     backgroundColor: "#fff",
+    color: "#111827",
+    caretColor: "#111827",
   },
   button: {
     border: "none",
