@@ -1,44 +1,50 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  localStorage.removeItem("token");
+  localStorage.removeItem("ownerName");
+  localStorage.removeItem("ownerPhone");
+  navigate("/login");
+};
+
+  const handleNavClick = () => {
+    setMobileMenuOpen(false);
   };
 
   return (
     <header style={styles.header}>
       <div style={styles.container}>
-        <div style={styles.logoWrap}>
+        {/* Logo */}
+        <Link to="/" style={styles.logoWrap} onClick={handleNavClick}>
           <div style={styles.logoIcon}>🏠</div>
-          <Link to="/" style={styles.logoText}>
-            RealEstate
-          </Link>
-        </div>
+          <span style={styles.logoText}>RealEstate</span>
+        </Link>
 
-        <nav style={styles.centerNav}>
-          <Link to="/" style={styles.activeLink}>
+        {/* Desktop Navigation */}
+        <nav style={styles.desktopNav}>
+          <Link to="/" style={styles.navLink}>
             Plots
           </Link>
-          <a href="#" style={styles.link}>
-            About
-          </a>
-          <a href="#" style={styles.link}>
+          <Link to="/contact" style={styles.navLink}>
             Contact
-          </a>
+          </Link>
         </nav>
 
-        <div style={styles.rightNav}>
-          <a href="tel:9876543210" style={styles.callBtn}>
+        {/* Desktop Actions */}
+        <div style={styles.desktopActions}>
+          <Link to="/contact" style={styles.ctaBtn}>
             WhatsApp / Call
-          </a>
+          </Link>
 
           {token ? (
             <>
-              <Link to="/add-plot" style={styles.ownerBtn}>
+              <Link to="/add-plot" style={styles.secondaryBtn}>
                 Add Plot
               </Link>
               <button onClick={handleLogout} style={styles.logoutBtn}>
@@ -46,12 +52,65 @@ function Navbar() {
               </button>
             </>
           ) : (
-            <Link to="/login" style={styles.ownerBtn}>
+            <Link to="/login" style={styles.secondaryBtn}>
               Owner Login
             </Link>
           )}
         </div>
+
+        {/* Mobile Hamburger Button */}
+        <button
+          style={styles.hamburger}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span style={styles.hamburgerLine} />
+          <span style={styles.hamburgerLine} />
+          <span style={styles.hamburgerLine} />
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div style={styles.mobileMenu}>
+          <Link to="/" style={styles.mobileNavLink} onClick={handleNavClick}>
+            📍 Plots
+          </Link>
+          <Link to="/contact" style={styles.mobileNavLink} onClick={handleNavClick}>
+            📞 Contact
+          </Link>
+          <Link
+            to="/contact"
+            style={{ ...styles.mobileNavLink, backgroundColor: "#16a34a", color: "white" }}
+            onClick={handleNavClick}
+          >
+            💬 WhatsApp / Call
+          </Link>
+
+          {token ? (
+            <>
+              <Link
+                to="/add-plot"
+                style={{ ...styles.mobileNavLink, backgroundColor: "#f3f4f6" }}
+                onClick={handleNavClick}
+              >
+                ➕ Add Plot
+              </Link>
+              <button onClick={handleLogout} style={styles.mobileLogoutBtn}>
+                🚪 Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              style={{ ...styles.mobileNavLink, backgroundColor: "#111827", color: "white" }}
+              onClick={handleNavClick}
+            >
+              🔑 Owner Login
+            </Link>
+          )}
+        </div>
+      )}
     </header>
   );
 }
@@ -68,54 +127,47 @@ const styles = {
   container: {
     maxWidth: "1200px",
     margin: "0 auto",
-    padding: "14px 16px",
+    padding: "12px 16px",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: "12px",
-    flexWrap: "wrap",
+    gap: "16px",
   },
   logoWrap: {
     display: "flex",
     alignItems: "center",
     gap: "8px",
+    textDecoration: "none",
+    minWidth: "fit-content",
   },
   logoIcon: {
-    fontSize: "22px",
+    fontSize: "24px",
   },
   logoText: {
     textDecoration: "none",
     color: "#1d4ed8",
-    fontSize: "20px",
+    fontSize: "18px",
     fontWeight: "800",
   },
-  centerNav: {
+  desktopNav: {
     display: "flex",
     alignItems: "center",
     gap: "24px",
-    flexWrap: "wrap",
+    flex: 1,
+    justifyContent: "center",
   },
-  link: {
+  navLink: {
     textDecoration: "none",
     color: "#374151",
     fontSize: "14px",
     fontWeight: "500",
   },
-  activeLink: {
-    textDecoration: "none",
-    color: "#2563eb",
-    fontSize: "14px",
-    fontWeight: "700",
-    paddingBottom: "6px",
-    borderBottom: "2px solid #2563eb",
-  },
-  rightNav: {
+  desktopActions: {
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    flexWrap: "wrap",
   },
-  callBtn: {
+  ctaBtn: {
     textDecoration: "none",
     backgroundColor: "#16a34a",
     color: "white",
@@ -124,7 +176,7 @@ const styles = {
     fontSize: "14px",
     fontWeight: "600",
   },
-  ownerBtn: {
+  secondaryBtn: {
     textDecoration: "none",
     border: "1px solid #d1d5db",
     color: "#111827",
@@ -143,6 +195,71 @@ const styles = {
     fontSize: "14px",
     fontWeight: "600",
     cursor: "pointer",
+  },
+  hamburger: {
+    display: "none",
+    flexDirection: "column",
+    gap: "6px",
+    border: "none",
+    background: "none",
+    cursor: "pointer",
+    padding: "8px",
+  },
+  hamburgerLine: {
+    width: "24px",
+    height: "3px",
+    backgroundColor: "#111827",
+    borderRadius: "2px",
+    transition: "all 0.3s",
+  },
+  mobileMenu: {
+    display: "none",
+    flexDirection: "column",
+    gap: "8px",
+    padding: "12px 16px",
+    backgroundColor: "#f9fafb",
+    borderTop: "1px solid #e5e7eb",
+  },
+  mobileNavLink: {
+    display: "block",
+    padding: "12px 16px",
+    textDecoration: "none",
+    color: "#111827",
+    fontSize: "15px",
+    fontWeight: "600",
+    borderRadius: "8px",
+    textAlign: "center",
+    backgroundColor: "#ffffff",
+    border: "1px solid #e5e7eb",
+  },
+  mobileLogoutBtn: {
+    padding: "12px 16px",
+    textDecoration: "none",
+    color: "white",
+    fontSize: "15px",
+    fontWeight: "600",
+    borderRadius: "8px",
+    textAlign: "center",
+    backgroundColor: "#111827",
+    border: "none",
+    cursor: "pointer",
+    width: "100%",
+  },
+
+  // Media query styles (applied via JavaScript for better compatibility)
+  "@media (max-width: 768px)": {
+    desktopNav: {
+      display: "none",
+    },
+    desktopActions: {
+      display: "none",
+    },
+    hamburger: {
+      display: "flex",
+    },
+    mobileMenu: {
+      display: "flex",
+    },
   },
 };
 

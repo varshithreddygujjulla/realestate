@@ -6,6 +6,7 @@ import PlotDetails from "./pages/PlotDetails";
 import Login from "./pages/Login";
 import AddPlot from "./pages/AddPlot";
 import EditPlot from "./pages/EditPlot";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/plots" element={<Plots />} />
         <Route path="/plots/:id" element={<PlotDetails />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/contact" element={<Contact />} />
         <Route
           path="/add-plot"
           element={

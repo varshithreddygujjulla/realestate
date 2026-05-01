@@ -26,6 +26,13 @@ function Login() {
       const response = await api.post("/auth/login", formData);
 
       localStorage.setItem("token", response.data.token);
+
+      // Store owner info so the Contact page can display it
+      if (response.data.owner) {
+        localStorage.setItem("ownerName", response.data.owner.name || "");
+        localStorage.setItem("ownerPhone", response.data.owner.phone || "");
+      }
+
       setMessage("Login successful");
       navigate("/plots");
     } catch (error) {
@@ -101,6 +108,9 @@ const styles = {
     border: "1px solid #ccc",
     borderRadius: "8px",
     outline: "none",
+    colorScheme: "light",
+    color: "#111827",
+    backgroundColor: "#fff",
   },
   button: {
     padding: "12px",
