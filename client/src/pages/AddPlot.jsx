@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import ImageUpload from "../components/ImageUpload";
-import ImageUpload from "../components/ImageUpload";
+
 
 function AddPlot() {
   const navigate = useNavigate();
