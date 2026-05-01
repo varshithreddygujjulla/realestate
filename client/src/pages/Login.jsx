@@ -35,10 +35,12 @@ function Login() {
 
       setMessage("Login successful");
       navigate("/plots");
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Login failed");
-    }
-  };
+} catch (error) {
+  console.log("Login error:", error);
+  console.log("Response data:", error.response?.data);
+  setMessage(error.response?.data?.message || error.message || "Login failed");
+}
+  }
 
   return (
     <div style={styles.page}>
